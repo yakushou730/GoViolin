@@ -71,16 +71,19 @@ func getPort() string {
 
 func render(w http.ResponseWriter, tmpl string, pageVars PageVars) {
 
-	tmpl = fmt.Sprintf("templates/%s", tmpl) // prefix the name passed in with templates/
-	t, err := template.ParseFiles(tmpl)      //parse the template file held in the templates folder
+	// prefix the name passed in with templates/
+	tmpl = fmt.Sprintf("templates/%s", tmpl)
 
-	if err != nil { // if there is an error
-		log.Print("template parsing error: ", err) // log it
+	//parse the template file held in the templates folder
+	t, err := template.ParseFiles(tmpl)
+	if err != nil {
+		log.Print("template parsing error: ", err)
+		return
 	}
 
-	err = t.Execute(w, pageVars) //execute the template and pass in the variables to fill the gaps
-
-	if err != nil { // if there is an error
-		log.Print("template executing error: ", err) //log it
+	// Execute the template and pass in the variables to fill the gaps
+	if err = t.Execute(w, pageVars); err != nil {
+		log.Print("template executing error: ", err)
+		return
 	}
 }
